@@ -1,0 +1,106 @@
+<div class="container py-5">
+
+  <h1 class="text-center mb-4">
+    My Notes
+  </h1>
+
+  <!-- Add note form -->
+  <div class="card shadow-sm mb-5">
+
+    <div class="card-body">
+
+      <h5 class="card-title mb-3">
+        Add a new note
+      </h5>
+
+      <div class="mb-3">
+
+        <label class="form-label">
+          Title
+        </label>
+
+        <input
+          #title
+          type="text"
+          class="form-control"
+          placeholder="Enter note title"
+        >
+
+      </div>
+
+      <div class="mb-3">
+
+        <label class="form-label">
+          Text
+        </label>
+
+        <textarea
+          #text
+          class="form-control"
+          rows="4"
+          placeholder="Enter note text"
+        ></textarea>
+
+      </div>
+
+      <button
+        class="btn btn-primary"
+        (click)="addNote(title, text)"
+      >
+        Add
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- No notes -->
+  <div
+    *ngIf="notes.length === 0"
+    class="alert alert-info"
+  >
+    No notes yet.
+  </div>
+
+
+  <!-- Notes -->
+  <div class="row g-4">
+
+    <div
+      *ngFor="let note of notes; let i = index"
+      class="col-md-6 col-lg-4"
+    >
+
+      <div class="card h-100 shadow-sm">
+
+        <div class="card-body">
+
+          <h5 class="card-title">
+            {{ note.title }}
+          </h5>
+
+          <p class="card-text">
+            {{ note.text }}
+          </p>
+
+        </div>
+
+        <div class="card-footer bg-transparent border-0">
+
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="deleteNote(i)"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
