@@ -1,48 +1,43 @@
-// import { Service , Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 
-// @Service()
-import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class NotesService {
     notes: any[] = [];
 
-  constructor() {
+    constructor() {
     const savedNotes = localStorage.getItem('notes');
 
     if (savedNotes) {
       this.notes = JSON.parse(savedNotes);
+        }
     }
-  }
 
-  getNotes() {
-    return this.notes;
-  }
+    getNotes() {
+        return this.notes;
+    }
 
-  addNote(title: string, text: string) {
+    addNote(title: string, text: string) {
 
-    const note = {
-      title: title,
-      text: text
-    };
+        const note = {
+        title: title,
+        text: text
+        };
 
-    this.notes.push(note);
+        this.notes.push(note);
 
-    localStorage.setItem(
-      'notes',
-      JSON.stringify(this.notes)
-    );
-  }
+        localStorage.setItem(
+        'notes',
+        JSON.stringify(this.notes)
+        );
+    }
 
-  deleteNote(index: number) {
+    deleteNote(index: number) {
 
-    this.notes.splice(index, 1);
+        this.notes.splice(index, 1);
 
-    localStorage.setItem(
-      'notes',
-      JSON.stringify(this.notes)
-    );
-  }
+        localStorage.setItem(
+        'notes',
+        JSON.stringify(this.notes)
+        );
+    }
 }
