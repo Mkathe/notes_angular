@@ -1,43 +1,48 @@
-import { Service } from '@angular/core';
+import { Observable } from 'rxjs';
 
-@Service()
+import { Injectable } from '@angular/core';
+import {
+  collection,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc
+} from 'firebase/firestore';
+import { db } from '../firebase.config';
+
+@Injectable({
+  providedIn: 'root'
+})
 export class NotesService {
-    notes: any[] = [];
+  private notesCollection = collection(db, 'notes');
 
-    constructor() {
-    const savedNotes = localStorage.getItem('notes');
+  getNotes(): Observable<any[]> {
+  return new Observable<any[]>(observer => {
+    const unsubscribe = onSnapshot(
+      this.notesCollection,
+      snapshot => {
+        const notes = snapshot.docs.map(note => ({
+          id: note.id,
+          ...note.data()
+        }));
+        
+        console.log('Firestore documents:', snapshot.size);
+        console.log('Firestore notes:', notes); 
 
-    if (savedNotes) {
-      this.notes = JSON.parse(savedNotes);
-        }
-    }
+        observer.next(notes);
+      },
+      error => observer.error(error)
+    );
 
-    getNotes() {
-        return this.notes;
-    }
+    return unsubscribe;
+  });
+  }
 
-    addNote(title: string, text: string) {
+  addNote(title: string, text: string) {
+    return addDoc(this.notesCollection, { title, text });
+  }
 
-        const note = {
-        title: title,
-        text: text
-        };
-
-        this.notes.push(note);
-
-        localStorage.setItem(
-        'notes',
-        JSON.stringify(this.notes)
-        );
-    }
-
-    deleteNote(index: number) {
-
-        this.notes.splice(index, 1);
-
-        localStorage.setItem(
-        'notes',
-        JSON.stringify(this.notes)
-        );
-    }
+  deleteNote(id: string) {
+    return deleteDoc(doc(db, 'notes', id));
+  }
 }
